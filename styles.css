@@ -1,0 +1,614 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  background-color: #dcedd9;
+  background-image: url('assets/fundo-textura.png');
+  background-repeat: repeat;
+  background-size: 1440px 1024px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.canvas-wrapper {
+  overflow: hidden;
+}
+
+.canvas {
+  position: relative;
+  width: 1440px;
+  height: 1024px;
+  background: #dcedd9;
+  transform-origin: top left;
+  font-family: 'Inter', sans-serif;
+}
+
+img {
+  display: block;
+  max-width: none;
+}
+
+/* ---------- Ilustrações ---------- */
+
+.ilustracao-grama {
+  position: absolute;
+  left: 288.31px;
+  top: 160.5px;
+  width: 123.184px;
+  height: 63.458px;
+}
+
+.ilustracao-pompompurin {
+  position: absolute;
+  left: 356.14px;
+  top: 76.6px;
+  width: 212.883px;
+  height: 170.802px;
+  object-fit: cover;
+}
+
+/* ---------- Área Principal ---------- */
+
+.area-principal {
+  position: absolute;
+  left: 80.57px;
+  top: 68px;
+  width: 842px;
+  height: 893px;
+}
+
+.layout-calendario {
+  position: relative;
+  margin-top: 20px;
+  width: 842.165px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 23px;
+}
+
+.cabecalho {
+  position: relative;
+  width: 829.693px;
+  height: 148px;
+}
+
+.mes-numero {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Acme', sans-serif;
+}
+
+.mes {
+  margin-bottom: -30px;
+  width: 100%;
+  text-align: center;
+  color: #e6555f;
+  font-size: 35.896px;
+}
+
+.numero {
+  width: 100%;
+  text-align: center;
+  color: #75312d;
+  font-size: 104.925px;
+}
+
+.mini-calendarios {
+  position: absolute;
+  left: 569.69px;
+  top: 7.5px;
+  width: 260px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  color: #d5894c;
+  text-align: center;
+}
+
+.mini-calendario {
+  flex: 1 0 0;
+  min-width: 0;
+  height: 133px;
+  background: white;
+  border: 1px solid #d5894c;
+  border-radius: 8.284px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+}
+
+.mini-mes {
+  font-family: 'Caladea', serif;
+  font-size: 13.806px;
+  white-space: nowrap;
+}
+
+.mini-dias {
+  font-family: 'Inter', sans-serif;
+  font-size: 8.974px;
+  line-height: 13.806px;
+  flex: 1 0 0;
+  width: 100%;
+}
+
+/* ---------- Grid do Calendário ---------- */
+
+.grid-calendario {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.cabecalho-dias-semana {
+  height: 35.896px;
+  background: #f6af4c;
+  border-top-left-radius: 8.284px;
+  border-top-right-radius: 8.284px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.dia-semana {
+  width: 120.309px;
+  box-sizing: border-box;
+  text-align: center;
+  font-family: 'Hind Mysuru', sans-serif;
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 1;
+  color: white;
+  transform: translateY(6.5px);
+}
+
+.dia-semana.sun {
+  color: #e6555f;
+}
+
+.grade-mes-container {
+  position: relative;
+}
+
+.grade-mes {
+  display: grid;
+  grid-template-columns: repeat(7, 120.309px);
+  grid-template-rows: repeat(5, 85.597px);
+}
+
+.celula {
+  position: relative;
+  background: white;
+  border: 1.381px solid #ead9a8;
+  padding-top: 8.28px;
+  padding-left: 11.04px;
+}
+
+.dia {
+  position: relative;
+  display: inline-block;
+  font-family: 'Caladea', serif;
+  font-size: 22.09px;
+  color: #7a4d29;
+}
+
+.dia.sun {
+  color: #d94f6a;
+}
+
+.dia.passado::after {
+  content: '';
+  position: absolute;
+  left: -5px;
+  right: -5px;
+  top: 48%;
+  height: 2.1px;
+  background: currentColor;
+  opacity: 0.7;
+  border-radius: 2px;
+  transform: translateY(-50%) rotate(-12deg);
+}
+
+.nota-dia {
+  position: absolute;
+  left: 11.04px;
+  top: 38px;
+  width: calc(100% - 16px);
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0;
+  font-family: 'Caladea', serif;
+  font-size: 13px;
+  color: #5a3c22;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#canvas-dias {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- Rodapé Calendário ---------- */
+
+.rodape-calendario {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.fita-xadrez {
+  position: relative;
+  height: 45.936px;
+  background-color: white;
+  background-image:
+    repeating-linear-gradient(to right, rgba(249, 217, 163, 0.8) 0 15.312px, transparent 15.312px 30.624px),
+    repeating-linear-gradient(to bottom, rgba(249, 217, 163, 0.55) 0 15.312px, transparent 15.312px 30.624px);
+}
+
+.ano {
+  position: absolute;
+  left: 0;
+  top: 7.66px;
+  width: 100%;
+  text-align: center;
+  font-family: 'Acme', sans-serif;
+  font-size: 26px;
+  color: #7a4d29;
+}
+
+.base-aba-dobra {
+  position: relative;
+  height: 160.777px;
+  background: #b4d3f0;
+}
+
+.navegacao {
+  position: absolute;
+  left: 50%;
+  top: 38.28px;
+  width: 261.579px;
+  height: 51.04px;
+  transform: translateX(-50%);
+}
+
+.botao-mes {
+  position: absolute;
+  top: 0;
+  width: 71.456px;
+  height: 51.04px;
+}
+
+.botao-anterior {
+  left: 0;
+  border: 1.914px solid #6b4221;
+  border-radius: 3.828px;
+}
+
+.botao-anterior .dobra {
+  position: absolute;
+  left: 0;
+  top: 17.86px;
+  width: 100%;
+  height: 2px;
+}
+
+.botao-proximo {
+  left: 190.13px;
+}
+
+.setas {
+  position: absolute;
+  left: 90.9px;
+  top: 15.31px;
+  width: 79.771px;
+  height: 20.416px;
+  cursor: pointer;
+}
+
+.setas:active {
+  transform: scale(0.9);
+}
+
+.instrucao {
+  position: absolute;
+  left: 50%;
+  top: 112.29px;
+  width: 567.823px;
+  transform: translateX(-50%);
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 11.484px;
+  color: #6b4221;
+}
+
+/* ---------- Barra Lateral ---------- */
+
+.barra-lateral {
+  position: absolute;
+  left: 958.57px;
+  top: 95.5px;
+  width: 425.841px;
+  height: 549.47px;
+  background: #f3edd0;
+  padding: 22px 22px 22px 0;
+  overflow: hidden;
+}
+
+.marcador-lateral-superior {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  width: 9.531px;
+  height: 47.313px;
+  background: #75312d;
+  transition: height 0.15s ease-out;
+}
+
+.marcador-lateral-inferior {
+  position: absolute;
+  left: 0;
+  top: 47.313px;
+  width: 9.531px;
+  height: 502.156px;
+  background: white;
+}
+
+.lista-diaria-scroll {
+  width: 100%;
+  max-height: 505.47px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.lista-diaria-scroll::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.lista-diaria {
+  display: flex;
+  flex-direction: column;
+  gap: 6.017px;
+  width: 403.841px;
+}
+
+.linha-dia {
+  display: flex;
+  align-items: center;
+  gap: 5.349px;
+  width: 100%;
+}
+
+.dia-num {
+  width: 34.768px;
+  text-align: right;
+  font-family: 'Caladea', serif;
+  font-size: 17.384px;
+  color: #7a4d29;
+}
+
+.dia-num.sun {
+  color: #f4a73e;
+}
+
+.linha {
+  flex: 1 0 0;
+  height: 28.082px;
+  background: white;
+  border: 1.337px solid #e0d7b3;
+  outline: none;
+  padding: 0 10px;
+  font-family: 'Caladea', serif;
+  font-size: 15px;
+  color: #5a3c22;
+}
+
+.linha:focus {
+  border-color: #e0d7b3;
+}
+
+/* ---------- Bloco de Notas ---------- */
+
+.bloco-notas {
+  position: absolute;
+  left: 951.57px;
+  top: 674px;
+  width: 440px;
+  height: 263px;
+  background: #fcb643;
+  border: 14px solid #f3edd0;
+}
+
+.texto-nota {
+  position: absolute;
+  left: 10.38px;
+  top: 30px;
+  width: 390px;
+  height: 155px;
+  border: none;
+  outline: none;
+  resize: none;
+  background: transparent;
+  font-family: 'Caladea', serif;
+  font-size: 20px;
+  line-height: 31px;
+  color: #5a3c22;
+  padding: 0;
+}
+
+#canvas-nota {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.linhas-notas {
+  position: absolute;
+  left: 975.95px;
+  top: 747px;
+  width: 379px;
+  height: 124px;
+  pointer-events: none;
+}
+
+.icone-sino {
+  position: absolute;
+  left: 916.19px;
+  top: 627.55px;
+  width: 119.446px;
+  height: 119.446px;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  justify-content: center;
+}
+
+.icone-sino img {
+  width: 87.982px;
+  height: 87.982px;
+  transform: rotate(151.27deg) scaleY(-1);
+}
+
+/* ---------- Barra de Ícones ---------- */
+
+.barra-icones {
+  position: absolute;
+  left: 1228.67px;
+  top: 38px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icone-toolbar {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.icone-toolbar.ativo {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  box-shadow: 0 0 0 2px rgba(107, 66, 33, 0.55);
+}
+
+.canvas-desenho {
+  pointer-events: none;
+}
+
+.canvas-desenho.ativo {
+  pointer-events: auto;
+  cursor: crosshair;
+}
+
+.icone-toolbar img {
+  position: absolute;
+}
+
+.icone-toolbar:nth-child(1) img {
+  width: 40px;
+  height: 32.5px;
+}
+
+.icone-toolbar:nth-child(2) img {
+  width: 16.875px;
+  height: 41.2495px;
+  transform: rotate(15deg);
+}
+
+.icone-toolbar:nth-child(3) img {
+  width: 13.125px;
+  height: 41.5633px;
+  transform: rotate(20deg);
+}
+
+/* ---------- Motion de interação (squish) ---------- */
+
+.squishy-btn:active {
+  transform: scale(0.9);
+}
+
+.squishy-btn.squish {
+  animation: squish 0.4s ease;
+}
+
+@keyframes squish {
+  0% { transform: scale(1); }
+  30% { transform: scale(0.85, 1.1); }
+  60% { transform: scale(1.1, 0.85); }
+  100% { transform: scale(1); }
+}
+
+/* ---------- Paleta de Cores ---------- */
+
+.paleta-cores {
+  position: absolute;
+  left: 1113.4px;
+  top: 40.75px;
+  width: 167.3px;
+  height: 44.65px;
+  background: #f3edd0;
+  border-radius: 54px;
+  display: flex;
+  align-items: center;
+  padding-left: 14px;
+  transform: scaleX(0);
+  transform-origin: right center;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+.paleta-cores.aberta {
+  transform: scaleX(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.8px solid #7a4d29;
+  padding: 0;
+  margin-left: -8px;
+  cursor: pointer;
+}
+
+.swatch:first-child {
+  margin-left: 0;
+}
+
+.swatch.selecionada {
+  outline: 2.5px solid #6b4221;
+  outline-offset: 1.5px;
+}

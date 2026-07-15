@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calendário Pompompurin – Julho 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Acme&family=Caladea:wght@400;700&family=Hind+Mysuru:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="canvas-wrapper">
+  <div class="canvas">
+
+    <img class="ilustracao-grama" src="assets/grama.svg" alt="">
+    <img class="ilustracao-pompompurin" src="assets/pompompurin.png" alt="Pompompurin">
+
+    <div class="area-principal">
+      <div class="layout-calendario">
+
+        <div class="cabecalho">
+          <div class="mes-numero">
+            <p class="mes" id="mes-atual"></p>
+            <p class="numero" id="dia-atual"></p>
+          </div>
+
+          <div class="mini-calendarios">
+            <div class="mini-calendario" id="mini-anterior">
+              <p class="mini-mes"></p>
+              <div class="mini-dias"></div>
+            </div>
+            <div class="mini-calendario" id="mini-proximo">
+              <p class="mini-mes"></p>
+              <div class="mini-dias"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-calendario">
+          <div class="cabecalho-dias-semana">
+            <span class="dia-semana sun">SUN</span>
+            <span class="dia-semana">MON</span>
+            <span class="dia-semana">TUE</span>
+            <span class="dia-semana">WED</span>
+            <span class="dia-semana">THU</span>
+            <span class="dia-semana">FRI</span>
+            <span class="dia-semana">SAT</span>
+          </div>
+
+          <div class="grade-mes-container">
+          <div class="grade-mes" id="grade-mes"></div>
+          <canvas id="canvas-dias" class="canvas-desenho"></canvas>
+          </div>
+
+          <div class="rodape-calendario">
+            <div class="fita-xadrez">
+              <p class="ano" id="ano-atual"></p>
+            </div>
+            <div class="base-aba-dobra">
+              <div class="navegacao">
+                <div class="botao-mes botao-anterior">
+                  <img class="dobra" src="assets/dobra.svg" alt="">
+                </div>
+                <img class="botao-mes botao-proximo" src="assets/frame2197.svg" alt="">
+                <img class="setas" src="assets/frame2206.svg" alt="">
+              </div>
+              <p class="instrucao">MEMOなどにご記入ください</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="barra-lateral">
+      <div class="marcador-lateral-superior"></div>
+      <div class="marcador-lateral-inferior"></div>
+      <div class="lista-diaria-scroll">
+        <div class="lista-diaria" id="lista-diaria"></div>
+      </div>
+    </div>
+
+    <div class="bloco-notas">
+      <textarea id="texto-nota" class="texto-nota" maxlength="500"></textarea>
+      <canvas id="canvas-nota" class="canvas-desenho"></canvas>
+    </div>
+    <img class="linhas-notas" src="assets/linhas-notas.svg" alt="">
+    <div class="icone-sino">
+      <img src="assets/icone-sino.svg" alt="">
+    </div>
+
+    <div class="paleta-cores" id="paleta-cores">
+      <button type="button" class="swatch squishy-btn selecionada" data-cor="#66a828" style="background:#66a828"></button>
+      <button type="button" class="swatch squishy-btn" data-cor="#f6d916" style="background:#f6d916"></button>
+      <button type="button" class="swatch squishy-btn" data-cor="#e6555f" style="background:#e6555f"></button>
+      <button type="button" class="swatch squishy-btn" data-cor="#b4d3f0" style="background:#b4d3f0"></button>
+      <button type="button" class="swatch squishy-btn" data-cor="#f4a73e" style="background:#f4a73e"></button>
+      <button type="button" class="swatch squishy-btn" data-cor="#ffffff" style="background:#ffffff"></button>
+    </div>
+    <div class="barra-icones">
+      <div class="icone-toolbar squishy-btn" id="tool-paleta" title="Paleta de cores">
+        <img src="assets/paleta.svg" alt="Paleta de cores">
+      </div>
+      <div class="icone-toolbar squishy-btn" id="tool-caneta" title="Caneta">
+        <img src="assets/pincel.svg" alt="Caneta">
+      </div>
+      <div class="icone-toolbar squishy-btn" id="tool-marcador" title="Marcador">
+        <img src="assets/marcador.svg" alt="Marcador">
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
