@@ -24,7 +24,6 @@ html, body {
   position: relative;
   width: 1440px;
   height: 1024px;
-  background: #dcedd9;
   transform-origin: top left;
   font-family: 'Inter', sans-serif;
 }

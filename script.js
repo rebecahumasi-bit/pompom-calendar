@@ -372,8 +372,8 @@ function setupDrawingCanvas(canvasEl) {
     registrarEstadoAnterior(canvasEl);
     drawing = true;
     last = toLocalPoint(evt);
-    canvasEl.setPointerCapture(evt.pointerId);
-    // desenha um ponto ao clicar sem arrastar
+    // sem setPointerCapture: assim, ao sair da área desenhável durante o arrasto,
+    // o cursor volta ao normal (o pointerleave abaixo já encerra o traço corretamente)
     drawSegment(last, last);
   }
 
