@@ -204,6 +204,7 @@ img {
   font-family: 'Caladea', serif;
   font-size: 22.09px;
   color: #7a4d29;
+  cursor: pointer;
 }
 
 .dia.sun {

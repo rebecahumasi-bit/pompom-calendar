@@ -17,6 +17,7 @@ fit();
 
 let anoAtual = null;
 let mesAtual = null;
+let diaSelecionadoNota = null;
 
 function chaveArmazenamento(ano, mes) {
   return `pompompurin-calendario-${ano}-${mes}`;
@@ -89,6 +90,8 @@ function criarCelulaDia(dia, ehDomingo, ehPassado, valorSalvo) {
     spanDia.className = ehDomingo ? 'dia sun' : 'dia';
     if (ehPassado) spanDia.classList.add('passado');
     spanDia.textContent = String(dia);
+    spanDia.dataset.dia = String(dia);
+    spanDia.addEventListener('click', () => mostrarNotaNoPin(dia));
 
     const inputNota = document.createElement('input');
     inputNota.type = 'text';
@@ -190,16 +193,35 @@ function construirCalendario(anoParam, mesParam) {
     listaDiaria.appendChild(criarLinhaLateral(d, ehMesReal && d === diaHojeReal, valorSalvo));
   }
 
+  diaSelecionadoNota = null;
   const textoNota = document.getElementById('texto-nota');
   textoNota.value = dadosSalvos.memo || '';
+}
+
+// mostra a anotação do dia clicado no bloco com o pin (não altera mais nada no layout)
+function mostrarNotaNoPin(dia) {
+  diaSelecionadoNota = dia;
+  const dadosSalvos = carregarDadosSalvos(anoAtual, mesAtual);
+  const textoNota = document.getElementById('texto-nota');
+  textoNota.value = (dadosSalvos.notas && dadosSalvos.notas[dia]) || '';
 }
 
 construirCalendario();
 
 document.getElementById('texto-nota').addEventListener('input', (evt) => {
-  atualizarDadosSalvos(anoAtual, mesAtual, (dados) => {
-    dados.memo = evt.target.value;
-  });
+  const valor = evt.target.value;
+  if (diaSelecionadoNota !== null) {
+    atualizarDadosSalvos(anoAtual, mesAtual, (dados) => {
+      dados.notas = dados.notas || {};
+      dados.notas[diaSelecionadoNota] = valor;
+    });
+    const inputCelula = document.querySelector(`.nota-dia[data-dia="${diaSelecionadoNota}"]`);
+    if (inputCelula) inputCelula.value = valor;
+  } else {
+    atualizarDadosSalvos(anoAtual, mesAtual, (dados) => {
+      dados.memo = valor;
+    });
+  }
 });
 
 // ---------- Marcador lateral animado (acompanha o scroll da lista) ----------
