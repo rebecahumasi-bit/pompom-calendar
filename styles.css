@@ -211,6 +211,10 @@ img {
   color: #d94f6a;
 }
 
+.dia.hoje {
+  color: #f4a73e;
+}
+
 .dia.passado::after {
   content: '';
   position: absolute;
@@ -411,7 +415,7 @@ img {
   color: #7a4d29;
 }
 
-.dia-num.sun {
+.dia-num.hoje {
   color: #f4a73e;
 }
 
