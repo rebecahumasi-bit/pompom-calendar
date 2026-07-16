@@ -476,3 +476,29 @@ setasEl.addEventListener('click', (evt) => {
     irParaProximoMes();
   }
 });
+
+// ---------- Mantém tudo atualizado para o dia real ao entrar/voltar à página ----------
+
+let ultimoAnoRealVisto = new Date().getFullYear();
+let ultimoMesRealVisto = new Date().getMonth();
+
+function sincronizarComDiaAtual() {
+  const hojeReal = new Date();
+  const anoReal = hojeReal.getFullYear();
+  const mesReal = hojeReal.getMonth();
+
+  // o usuário estava vendo o mês que era "hoje" da última vez? então acompanha a mudança de dia/mês real
+  const estavaNoMesReal = anoAtual === ultimoAnoRealVisto && mesAtual === ultimoMesRealVisto;
+
+  ultimoAnoRealVisto = anoReal;
+  ultimoMesRealVisto = mesReal;
+
+  if (estavaNoMesReal) {
+    irParaMes(anoReal, mesReal);
+  }
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') sincronizarComDiaAtual();
+});
+window.addEventListener('focus', sincronizarComDiaAtual);
