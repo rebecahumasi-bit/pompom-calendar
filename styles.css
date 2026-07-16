@@ -214,6 +214,10 @@ img {
   color: #f4a73e;
 }
 
+.dia.selecionado {
+  font-weight: 700;
+}
+
 .dia.passado::after {
   content: '';
   position: absolute;

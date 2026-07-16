@@ -96,7 +96,7 @@ function preencherMiniCalendario(container, ano, mes) {
   });
 }
 
-function criarCelulaDia(dia, ehDomingo, ehPassado, valorSalvo, ehHoje) {
+function criarCelulaDia(dia, ehDomingo, ehPassado, valorSalvo, ehHoje, ehSelecionado) {
   const celula = document.createElement('div');
   celula.className = 'celula';
   if (dia !== null) {
@@ -104,6 +104,7 @@ function criarCelulaDia(dia, ehDomingo, ehPassado, valorSalvo, ehHoje) {
     spanDia.className = ehDomingo ? 'dia sun' : 'dia';
     if (ehPassado) spanDia.classList.add('passado');
     if (ehHoje) spanDia.classList.add('hoje');
+    if (ehSelecionado) spanDia.classList.add('selecionado');
     spanDia.textContent = String(dia);
     spanDia.dataset.dia = String(dia);
     spanDia.addEventListener('click', () => mostrarNotaNoPin(dia));
@@ -199,8 +200,9 @@ function construirCalendario(anoParam, mesParam) {
     const ehDomingo = i % 7 === 0;
     const ehPassado = valido && (ehMesReal ? dia < diaHojeReal : mesExibidoEhAnterior);
     const ehHojeCelula = valido && ehMesReal && dia === diaHojeReal;
+    const ehSelecionadoCelula = valido && dia === diaHoje;
     const valorSalvo = valido && dadosSalvos.notas ? dadosSalvos.notas[dia] : '';
-    gradeMes.appendChild(criarCelulaDia(valido ? dia : null, ehDomingo, ehPassado, valorSalvo, ehHojeCelula));
+    gradeMes.appendChild(criarCelulaDia(valido ? dia : null, ehDomingo, ehPassado, valorSalvo, ehHojeCelula, ehSelecionadoCelula));
   }
 
   const listaDiaria = document.getElementById('lista-diaria');
@@ -218,15 +220,19 @@ function construirCalendario(anoParam, mesParam) {
     }
   }
 
-  diaSelecionadoNota = null;
-  const textoNota = document.getElementById('texto-nota');
-  textoNota.value = dadosSalvos.memo || '';
+  // por padrão, o bloco com o pin mostra a anotação do dia em destaque (hoje, quando aplicável)
+  mostrarNotaNoPin(diaHoje);
 }
 
 // mostra a anotação (texto e desenho) do dia clicado no bloco com o pin — são campos
 // próprios por dia, independentes do texto fixo da caixinha do dia no calendário
 function mostrarNotaNoPin(dia) {
   diaSelecionadoNota = dia;
+
+  document.querySelectorAll('#grade-mes .dia.selecionado').forEach((el) => el.classList.remove('selecionado'));
+  const spanAlvo = document.querySelector(`#grade-mes .dia[data-dia="${dia}"]`);
+  if (spanAlvo) spanAlvo.classList.add('selecionado');
+
   const dadosSalvos = carregarDadosSalvos(anoAtual, mesAtual);
   const textoNota = document.getElementById('texto-nota');
   textoNota.value = (dadosSalvos.anotacoesDia && dadosSalvos.anotacoesDia[dia]) || '';
@@ -253,21 +259,12 @@ function atualizarMarcadorLateral() {
 listaDiariaScroll.addEventListener('scroll', atualizarMarcadorLateral);
 window.addEventListener('resize', atualizarMarcadorLateral);
 
-construirCalendario();
-atualizarMarcadorLateral();
-
 document.getElementById('texto-nota').addEventListener('input', (evt) => {
-  const valor = evt.target.value;
-  if (diaSelecionadoNota !== null) {
-    atualizarDadosSalvos(anoAtual, mesAtual, (dados) => {
-      dados.anotacoesDia = dados.anotacoesDia || {};
-      dados.anotacoesDia[diaSelecionadoNota] = valor;
-    });
-  } else {
-    atualizarDadosSalvos(anoAtual, mesAtual, (dados) => {
-      dados.memo = valor;
-    });
-  }
+  if (diaSelecionadoNota === null) return;
+  atualizarDadosSalvos(anoAtual, mesAtual, (dados) => {
+    dados.anotacoesDia = dados.anotacoesDia || {};
+    dados.anotacoesDia[diaSelecionadoNota] = evt.target.value;
+  });
 });
 
 // ---------- Ferramentas de desenho (caneta / marcador) ----------
@@ -429,6 +426,10 @@ function setupDrawingCanvas(canvasEl) {
 
 const drawingCanvases = Array.from(document.querySelectorAll('.canvas-desenho'));
 drawingCanvases.forEach(setupDrawingCanvas);
+
+// só agora (com os canvases já dimensionados corretamente) o calendário é montado pela 1ª vez
+construirCalendario();
+atualizarMarcadorLateral();
 
 function setActiveTool(name) {
   activeTool = activeTool === name ? null : name;
