@@ -19,6 +19,20 @@ let anoAtual = null;
 let mesAtual = null;
 let diaSelecionadoNota = null;
 
+// limpeza única de tudo que foi salvo antes desta versão — a partir daqui,
+// só conta o que os usuários registrarem dora em diante
+const VERSAO_RESET_DADOS = 'pompompurin-reset-v1';
+try {
+  if (!localStorage.getItem(VERSAO_RESET_DADOS)) {
+    Object.keys(localStorage)
+      .filter((chave) => chave.startsWith('pompompurin-calendario-'))
+      .forEach((chave) => localStorage.removeItem(chave));
+    localStorage.setItem(VERSAO_RESET_DADOS, 'true');
+  }
+} catch (e) {
+  // localStorage indisponível — nada a limpar
+}
+
 function chaveArmazenamento(ano, mes) {
   return `pompompurin-calendario-${ano}-${mes}`;
 }
