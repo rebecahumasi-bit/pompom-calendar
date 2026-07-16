@@ -209,13 +209,17 @@ function construirCalendario(anoParam, mesParam) {
   textoNota.value = dadosSalvos.memo || '';
 }
 
-// mostra a anotação do dia clicado no bloco com o pin — é um campo próprio,
-// independente do texto fixo da caixinha do dia (não deve alterar nem ser alterado por ele)
+// mostra a anotação (texto e desenho) do dia clicado no bloco com o pin — são campos
+// próprios por dia, independentes do texto fixo da caixinha do dia no calendário
 function mostrarNotaNoPin(dia) {
   diaSelecionadoNota = dia;
   const dadosSalvos = carregarDadosSalvos(anoAtual, mesAtual);
   const textoNota = document.getElementById('texto-nota');
   textoNota.value = (dadosSalvos.anotacoesDia && dadosSalvos.anotacoesDia[dia]) || '';
+
+  historicoDesfazer.length = 0; // evita desfazer traço de outro dia
+  const canvasNota = document.getElementById('canvas-nota');
+  if (canvasNota) carregarDesenho(canvasNota);
 }
 
 // ---------- Marcador lateral animado (acompanha o scroll da lista) ----------
@@ -281,21 +285,36 @@ function squish(el) {
 }
 
 function salvarDesenho(canvasEl) {
+  const dataURL = canvasEl.toDataURL('image/png');
+  // desenho do bloco com o pin: quando um dia está selecionado, fica vinculado só àquele dia
+  if (canvasEl.id === 'canvas-nota' && diaSelecionadoNota !== null) {
+    const dia = diaSelecionadoNota;
+    atualizarDadosSalvos(anoAtual, mesAtual, (dados) => {
+      dados.desenhosNotaPorDia = dados.desenhosNotaPorDia || {};
+      dados.desenhosNotaPorDia[dia] = dataURL;
+    });
+    return;
+  }
   const campo = NOME_ARMAZENAMENTO_DESENHO[canvasEl.id];
   if (!campo) return;
-  const dataURL = canvasEl.toDataURL('image/png');
   atualizarDadosSalvos(anoAtual, mesAtual, (dados) => {
     dados[campo] = dataURL;
   });
 }
 
 function carregarDesenho(canvasEl) {
-  const campo = NOME_ARMAZENAMENTO_DESENHO[canvasEl.id];
-  if (!campo) return;
   const ctx = canvasEl.getContext('2d');
   ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
   const dados = carregarDadosSalvos(anoAtual, mesAtual);
-  const dataURL = dados[campo];
+
+  let dataURL;
+  if (canvasEl.id === 'canvas-nota' && diaSelecionadoNota !== null) {
+    dataURL = dados.desenhosNotaPorDia && dados.desenhosNotaPorDia[diaSelecionadoNota];
+  } else {
+    const campo = NOME_ARMAZENAMENTO_DESENHO[canvasEl.id];
+    if (!campo) return;
+    dataURL = dados[campo];
+  }
   if (!dataURL) return;
   const img = new Image();
   img.onload = () => {
